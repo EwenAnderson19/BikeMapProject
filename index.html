@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <title>RoutingProject</title>
+        <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+        <link href="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.css" rel="stylesheet">
+        <script src="https://api.mapbox.com/mapbox-gl-js/v3.1.2/mapbox-gl.js"></script>
+        <script id="search-js" defer="" src="https://api.mapbox.com/search-js/v1.0.0-beta.18/web.js"></script>
+        <script src="/Data/climbs.js"></script>
+        <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        #routing-form {
+            position: absolute;
+            top: 10px; /* Adjust the top position as needed */
+            left: 10px; /* Adjust the left position as needed */
+            z-index: 1; /* Ensure the form appears above the map */
+            background-color: white; /* Optional: add a background color for better visibility */
+            padding: 10px; /* Optional: add padding for better appearance */
+        }
+        .marker {
+            background-image: url('/Images/mapbox-icon.png');
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        /* Override marker opacity when clicked */
+        .marker.mapboxgl-marker.mapboxgl-marker-anchor-center.clicked {
+            opacity: 1 !important;
+        }
+        .mapboxgl-popup {
+            max-width: 200px;
+        }
+        .mapboxgl-popup-content {
+            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        /* Style for the container */
+        .radio-container {
+            /* Optional: Adjust the width and height based on your design */
+            position: absolute;
+            top: 50px; /* Adjust the top position as needed */
+            right: 10px; /* Adjust the left position as needed */
+            background-color: white;
+            border-radius: 10px; /* Rounded corners */
+            border: 1px solid #ccc; /* Optional: Add border */
+            z-index: 1;
+        }
+
+        /* Style for radio buttons */
+        input[type="radio"] {
+            /* To ensure the radio button is clickable */
+            position: relative;
+            z-index: 1;
+            /* Optional: Add more styles here */
+        }
+
+        /* Additional styling for labels */
+        label {
+            /* Adjust this value based on your design */
+            /* You might need to increase the z-index of the label as well */
+            position: relative;
+            z-index: 2;
+            /* Optional: Add more styles here */
+        }
+        
+        </style>
+    </head>
+
+    <body>
+
+        <div id="map"></div>
+
+        <!-- <form id="routing-form" style="margin-top: 10px;">
+            <label for="start-point">Start Point:</label><br>
+            <input type="text" id="start-point" required><br>
+            <label for="finish-point">Finish Point:</label><br>
+            <input type="text" id="finish-point" required><br>
+            <button type="submit">Submit</button>
+        </form> -->
+
+        <div class="radio-container">
+            <fieldset>
+              <legend>Points of Interest:</legend>
+          
+              <div>
+                <input type="radio" id="none" name="drone" value="none" checked />
+                <label for="none">None</label>
+              </div>
+          
+              <div>
+                <input type="radio" id="climbs" name="drone" value="climbs" />
+                <label for="climbs">Climbs</label>
+              </div>
+            </fieldset>
+        </div>
+
+        <script>
+            // TO MAKE THE MAP APPEAR YOU MUST
+            // ADD YOUR ACCESS TOKEN FROM
+            // https://account.mapbox.com
+            mapboxgl.accessToken = 'pk.eyJ1IjoiZXdlbmFuZGVyc29uMTkiLCJhIjoiY2xzd2FoMThlMHVwajJxcXRpcGt5dTM0cSJ9.xzdXQ5bl4aYa0Z7VtDpIJA';
+
+            const map = new mapboxgl.Map({
+                container: 'map', // container ID
+                center: [2.3, 48.8], // starting position [lng, lat]
+                zoom: 4 // starting zoom
+            });
+
+            const searchJS = document.getElementById('search-js');
+                searchJS.onload = function () {
+                const searchBox = new MapboxSearchBox();
+                searchBox.accessToken = mapboxgl.accessToken;
+                searchBox.options = {
+                types: 'address,poi',
+                proximity: [-73.99209, 40.68933]
+                };
+                searchBox.marker = true;
+                searchBox.mapboxgl = mapboxgl;
+                map.addControl(searchBox);
+                };
+
+            // document.getElementById('routing-form').addEventListener('submit', function(e) {
+            //     e.preventDefault();
+            //     var startPoint = document.getElementById('start-point').value;
+            //     var finishPoint = document.getElementById('finish-point').value;
+
+                // Make request to OpenRouteService API and draw route on map
+                // Remember to replace 'YOUR_OPENROUTESERVICE_API_KEY' with your actual API key
+                // Handle errors and draw the route on the map accordingly
+            // });
+        </script>
+
+
+        <script src="/ClimbMarkers.js"></script>
+
+    </body>
+</html>
